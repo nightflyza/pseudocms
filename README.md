@@ -1,6 +1,6 @@
 # PseudoCMS
 
-Файлова міні-CMS для [YALF](https://yalf.nightfly.in.ua/). Накладається поверх існуючої установки.
+Файлова міні-CMS для [YALF](https://yalf.nightfly.in.ua/). Накладається поверх існуючої установки. Не змінює жодні модулі чи бібліотеки самого фреймворку.
 
 ## Склад пакета
 
@@ -15,6 +15,7 @@
 | `modules/general/pcmsmonitor/` | Монітор змін файлів |
 | `languages/ukrainian/pseudocms.php` | Локалізація українською |
 | `content/documents/pseudocms/` | Каталог даних (сторінки, статті тощо) |
+| `media/` | Директорія для завантажень медіа-файлів |
 | `skins/pseudocms.css` | Приклад публічного CSS (`PCMS_CUSTOM_STYLES`) |
 
 ## Встановлення
@@ -33,9 +34,9 @@ YALF_NO_AUTH_MODULES="articles,pages,rss,recent,pcmsmonitor"
 ```
 
 4. Для адмінки: обов'язкова опція `YALF_AUTH_ENABLED=1` та право `CMSMGR` адміністратора.
-5. Зробіть `content/documents/pseudocms/` доступним для запису
+5. Зробіть `content/documents/pseudocms/` та директорію завантаження медіа файлів доступними для запису
 ```sh
-chmod -R 777 content/documents/pseudocms
+chmod -R 777 content/documents/pseudocms media
 ```
 
 ## Публічні URL-адреси
@@ -68,7 +69,7 @@ $cms->runElement('sidebar');   // виконати як PHP (без тегів <
 
 ## CSS-класи
 
-Зарезервовані хуки для власного скіна (`PCMS_CUSTOM_STYLES`). Імена стабільні - зберігайте їх, замінюючи `skins/pseudocms.css`. Адмінка (`pcmsmgr`) ці класи не використовує, вони існують тільки для відображення в публічних модулях.
+Зарезервовані хуки для власного стилю (`PCMS_CUSTOM_STYLES`). Імена стабільні - зберігайте їх, замінюючи `skins/pseudocms.css` чи власний CSS. Адмінка (`pcmsmgr`) ці класи не використовує, вони існують тільки для відображення в публічних модулях.
 
 ### Обгортки розмітки
 
