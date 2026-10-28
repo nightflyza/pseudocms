@@ -19,7 +19,7 @@
 
 ## Встановлення
 
-1. Скопіюйте файли пакету в корінь YAL.
+1. Скопіюйте файли пакету в корінь проєкту YALF.
 2. У `config/alter.ini` увімкніть CMS:
 
 ```ini
@@ -109,7 +109,7 @@ PCMS_ARTICLES_PERPAGE=10
 ;PseudoCMS article date render: 0=hide, 1=date only, 2=date and time
 PCMS_ARTICLES_DATE_RENDER=2
 ;Optional custom public name for articles feed window
-PCMS_ARTICLES_CUSTOM_NAMING="News"
+PCMS_ARTICLES_CUSTOM_NAMING=""
 ;PseudoCMS articles creation default mode: 1 - html, 0 - text
 PCMS_ARTICLES_DEFAULT_HTML=0
 ;Browser page title: 0 - disabled, 1 - append to getPageTitle, 2 - replace with content title
