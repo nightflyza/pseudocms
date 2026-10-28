@@ -15,7 +15,6 @@
 | `modules/general/pcmsmonitor/` | Монітор змін файлів |
 | `languages/ukrainian/pseudocms.php` | Локалізація українською |
 | `content/documents/pseudocms/` | Каталог даних (сторінки, статті тощо) |
-| `media/` | Директорія для завантажень медіа-файлів |
 | `skins/pseudocms.css` | Приклад публічного CSS (`PCMS_CUSTOM_STYLES`) |
 
 ## Встановлення
@@ -36,7 +35,7 @@ YALF_NO_AUTH_MODULES="articles,pages,rss,recent,pcmsmonitor"
 4. Для адмінки: обов'язкова опція `YALF_AUTH_ENABLED=1` та право `CMSMGR` адміністратора.
 5. Зробіть `content/documents/pseudocms/` та директорію завантаження медіа файлів доступними для запису
 ```sh
-chmod -R 777 content/documents/pseudocms media
+chmod -R 777 content/documents/pseudocms
 ```
 
 ## Публічні URL-адреси
