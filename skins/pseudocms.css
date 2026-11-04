@@ -1,6 +1,6 @@
 .pcms_feed,
 .pcms_recent {
-    max-width: 48rem;
+    border: 0px;
 }
 
 .pcms_recent_more {
@@ -40,7 +40,6 @@
 
 .pcms_article,
 .pcms_page {
-    max-width: 48rem;
     line-height: 1.6;
 }
 
@@ -57,7 +56,7 @@
 
 .pcms_article_image {
     display: block;
-    max-width: 100%;
+    max-width: 80%;
     height: auto;
     margin: 1em 0;
     border-radius: 2px;

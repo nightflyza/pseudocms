@@ -11,7 +11,8 @@ if ($cms->isEnabled()) {
                 $article = $cms->getArticle($articleId);
                 if (!empty($article)) {
                     $cms->applyMutableTitle($article['title']);
-                    show_window($article['title'], $cms->renderCustomStylesLink() . $cms->renderArticle($articleId));
+                    $windowTitle = $article['title'] . $cms->renderArticleEditControl($articleId);
+                    show_window($windowTitle, $cms->renderCustomStylesLink() . $cms->renderArticle($articleId));
                 } else {
                     show_error(__('Article not found'));
                 }

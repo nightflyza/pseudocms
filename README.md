@@ -130,4 +130,6 @@ PCMS_MONITOR_ENABLED=1
 PCMS_MONITOR_IPS=""
 ;Relative paths ignored while scanning, comma-separated files or directories
 PCMS_MONITOR_IGNORE_PATHS=""
+;Disables fast edit controls for content preview on public modules
+PCMS_DISABLE_FAST_EDIT_CONTROLS=0
 ```

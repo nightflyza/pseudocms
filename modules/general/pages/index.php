@@ -13,7 +13,8 @@ if ($cms->isEnabled()) {
                     if (!empty($page['title'])) {
                         $cms->applyMutableTitle($page['title']);
                     }
-                    show_window($page['title'], $cms->renderCustomStylesLink() . $cms->renderPage($pageId));
+                    $windowTitle = $page['title'] . $cms->renderPageEditControl($pageId);
+                    show_window($windowTitle, $cms->renderCustomStylesLink() . $cms->renderPage($pageId));
                 } else {
                     show_error(__('Page not found'));
                 }

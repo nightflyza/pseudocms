@@ -27,7 +27,7 @@ class PseudoCMS {
     protected $adminArticlesPerPage = 10;
 
     /**
-     * Article date render mode from PCMS_ARTICLES_DATE_RENDER
+     * Article date render mode
      * 0 - hide, 1 - date only, 2 - date and time
      *
      * @var int
@@ -35,22 +35,22 @@ class PseudoCMS {
     protected $articlesDateRender = 2;
 
     /**
-     * Custom articles feed/module name from PCMS_ARTICLES_CUSTOM_NAMING
+     * Custom articles feed/module name
      *
      * @var string
      */
     protected $articlesCustomNaming = '';
 
     /**
-     * Browser page title mode from PCMS_MUTABLE_TITLES
-     * 0 - off, 1 - append to getPageTitle, 2 - replace with content title
+     * Browser page title mode
+     * 0 - off, 1 - append, 2 - replace with content title
      *
      * @var int
      */
     protected $mutableTitles = 0;
 
     /**
-     * Default article type for create form (PCMS_ARTICLES_DEFAULT_HTML)
+     * Default article type for create form
      * true = html, false = text
      *
      * @var bool
@@ -58,32 +58,46 @@ class PseudoCMS {
     protected $articlesDefaultHtml = true;
 
     /**
-     * Optional public stylesheet path from PCMS_CUSTOM_STYLES
+     * Optional public stylesheet path
      *
      * @var string
      */
     protected $customStylesPath = '';
 
     /**
-     * Recent articles widget count from PCMS_RECENT_COUNT (0 = off)
+     * Recent articles widget count (0 = off)
      *
      * @var int
      */
     protected $recentCount = 0;
 
     /**
-     * Public media directory relative path from PCMS_MEDIA_PATH (empty = disabled)
+     * Public media directory relative path (empty = disabled)
      *
      * @var string
      */
     protected $mediaPath = '';
 
     /**
-     * Allowed media extensions from PCMS_MEDIA_ALLOWED (lowercase)
+     * Allowed media extensions (lowercase)
      *
      * @var array
      */
     protected $mediaAllowed = array();
+
+    /**
+     * YALF auth engine enabled flag
+     *
+     * @var bool
+     */
+    protected $authEnabledFlag = false;
+
+    /**
+     * Public fast edit controls enabled
+     *
+     * @var bool
+     */
+    protected $fastEditEnableFlag = true;
 
     /**
      * Whether BBCode toolbar script was already output
@@ -114,7 +128,7 @@ class PseudoCMS {
     protected $storageError = '';
 
     /**
-     * Per-request scandir name whitelist cache (dir path => name=>name)
+     * Directory file-name whitelist cache
      *
      * @var array
      */
@@ -197,7 +211,21 @@ class PseudoCMS {
         $this->loadRecentCount();
         $this->loadMediaPath();
         $this->loadMediaAllowed();
+        $this->loadAuthEnableFlag();
+        $this->loadFastEditEnableFlag();
     }
+
+//
+//
+//                .''
+//      ._.-.___.' (`\
+//     //(        ( `'
+//    '/ )\ ).__. )
+//    ' <' `\ ._/'\
+//       `   \     \
+//
+//    Look at my horse, My horse is amazing!
+//
 
     /**
      * Inits system messages helper
@@ -209,7 +237,46 @@ class PseudoCMS {
     }
 
     /**
-     * Is PseudoCMS enabled via alter.ini PCMS_ENABLED
+     * Sets authEnabledFlag from system auth state
+     *
+     * @global object $system
+     *
+     * @return void
+     */
+    protected function loadAuthEnableFlag() {
+        global $system;
+        $flag = false;
+        if (isset($system) and is_object($system)) {
+            if ($system->getAuthEnabled()) {
+                $flag = true;
+            }
+        }
+        $this->authEnabledFlag = $flag;
+    }
+
+    /**
+     * Sets fastEditEnableFlag from PCMS_DISABLE_FAST_EDIT_CONTROLS option
+     *
+     * @global object $ubillingConfig
+     *
+     * @return void
+     */
+    protected function loadFastEditEnableFlag() {
+        global $ubillingConfig;
+        $flag = true;
+        if (isset($ubillingConfig) and is_object($ubillingConfig)) {
+            $altCfg = $ubillingConfig->getAlter();
+            if (is_array($altCfg) and isset($altCfg['PCMS_DISABLE_FAST_EDIT_CONTROLS'])) {
+                if ($altCfg['PCMS_DISABLE_FAST_EDIT_CONTROLS']) {
+                    $flag = false;
+                }
+            }
+        }
+        $this->fastEditEnableFlag = $flag;
+    }
+
+    /**
+     * Checks if PseudoCMS is enabled
      *
      * @global object $ubillingConfig
      *
@@ -227,7 +294,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_ARTICLES_PERPAGE from alter.ini when present
+     * Sets articlesPerPage from PCMS_ARTICLES_PERPAGE option
      *
      * @global object $ubillingConfig
      *
@@ -249,7 +316,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_ARTICLES_DATE_RENDER from alter.ini when present
+     * Sets articlesDateRender from PCMS_ARTICLES_DATE_RENDER option
      *
      * @global object $ubillingConfig
      *
@@ -271,7 +338,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_ARTICLES_CUSTOM_NAMING from alter.ini when present
+     * Sets articlesCustomNaming from PCMS_ARTICLES_CUSTOM_NAMING option
      *
      * @global object $ubillingConfig
      *
@@ -292,7 +359,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_MUTABLE_TITLES from alter.ini when present
+     * Sets mutableTitles from PCMS_MUTABLE_TITLES option
      *
      * @global object $ubillingConfig
      *
@@ -314,7 +381,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_ARTICLES_DEFAULT_HTML from alter.ini when present
+     * Sets articlesDefaultHtml from PCMS_ARTICLES_DEFAULT_HTML option
      *
      * @global object $ubillingConfig
      *
@@ -337,7 +404,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_CUSTOM_STYLES from alter.ini when present
+     * Sets customStylesPath from PCMS_CUSTOM_STYLES option
      *
      * @global object $ubillingConfig
      *
@@ -376,7 +443,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_RECENT_COUNT from alter.ini when present
+     * Sets recentCount from PCMS_RECENT_COUNT option
      *
      * @global object $ubillingConfig
      *
@@ -398,7 +465,7 @@ class PseudoCMS {
     }
 
     /**
-     * Is RSS module enabled via alter.ini PCMS_RSS_ENABLED
+     * Checks if RSS module is enabled
      *
      * @global object $ubillingConfig
      *
@@ -416,7 +483,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_MEDIA_PATH from alter.ini when present
+     * Sets mediaPath from PCMS_MEDIA_PATH option
      *
      * @global object $ubillingConfig
      *
@@ -442,7 +509,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads PCMS_MEDIA_ALLOWED from alter.ini when present
+     * Sets mediaAllowed from PCMS_MEDIA_ALLOWED option
      *
      * @global object $ubillingConfig
      *
@@ -476,7 +543,7 @@ class PseudoCMS {
     }
 
     /**
-     * Is media uploads enabled (non-empty PCMS_MEDIA_PATH)
+     * Checks if media uploads are enabled
      *
      * @return bool
      */
@@ -489,7 +556,7 @@ class PseudoCMS {
     }
 
     /**
-     * Site base URL from current request (scheme + host + app path, no trailing slash)
+     * Site base URL from current request
      *
      * @return string
      */
@@ -568,9 +635,9 @@ class PseudoCMS {
     }
 
     /**
-     * Updates system page title by PCMS_MUTABLE_TITLES mode
-     * 1 - append " - " + extraTitle to getPageTitle
-     * 2 - replace page title with extraTitle
+     * Updates system page title by mutableTitles mode
+     * 1 - append extraTitle
+     * 2 - replace with extraTitle
      *
      * @global object $system
      * @param string $extraTitle
@@ -593,7 +660,7 @@ class PseudoCMS {
     }
 
     /**
-     * Renders article datetime under content by PCMS_ARTICLES_DATE_RENDER
+     * Renders article datetime under content by articlesDateRender mode
      *
      * @param string $datetime
      *
@@ -619,6 +686,48 @@ class PseudoCMS {
                 $result .= wf_tag('div', false, 'pcms_article_date');
                 $result .= $text;
                 $result .= wf_tag('div', true);
+            }
+        }
+        return ($result);
+    }
+
+    /**
+     * Quick edit link for CMS managers on public article views
+     *
+     * @param mixed $articleId
+     *
+     * @return string
+     */
+    public function renderArticleEditControl($articleId) {
+        $result = '';
+        if ($this->fastEditEnableFlag) {
+            if ($this->authEnabledFlag and cfr('CMSMGR')) {
+                $articleId = $this->filterArticleId($articleId);
+                if (!empty($articleId)) {
+                    $editUrl = self::URL_ME . '&' . self::ROUTE_SECTION . '=' . self::SECTION_ARTICLES . '&' . self::ROUTE_EDIT_ARTICLE . '=' . $articleId;
+                    $result .= ' ' . wf_Link($editUrl, wf_img('skins/ymaps/edit.png', __('Edit article')), false, '', 'target="_blank"');
+                }
+            }
+        }
+        return ($result);
+    }
+
+    /**
+     * Quick edit link for CMS managers on public page views
+     *
+     * @param mixed $pageId
+     *
+     * @return string
+     */
+    public function renderPageEditControl($pageId) {
+        $result = '';
+        if ($this->fastEditEnableFlag) {
+            if ($this->authEnabledFlag and cfr('CMSMGR')) {
+                $pageId = $this->filterPageId($pageId);
+                if (!empty($pageId)) {
+                    $editUrl = self::URL_ME . '&' . self::ROUTE_SECTION . '=' . self::SECTION_PAGES . '&' . self::ROUTE_EDIT_PAGE . '=' . $pageId;
+                    $result .= ' ' . wf_Link($editUrl, wf_img('skins/ymaps/edit.png', __('Edit page')), false, '', 'target="_blank"');
+                }
             }
         }
         return ($result);
@@ -832,7 +941,7 @@ class PseudoCMS {
     }
 
     /**
-     * Cached file names in a directory (strict basename keys)
+     * File names in a directory
      *
      * @param string $dirPath
      *
@@ -865,7 +974,7 @@ class PseudoCMS {
     }
 
     /**
-     * Drops cached scandir whitelist for a directory
+     * Clears directory whitelist cache
      *
      * @param string $dirPath
      *
@@ -878,8 +987,7 @@ class PseudoCMS {
     }
 
     /**
-     * Path to an existing file only if filtered id is in directory scandir whitelist (as-is).
-     * Uses the name from the scan list for the final path segment.
+     * Resolved path for a filtered id inside a directory
      *
      * @param string $dirPath
      * @param string $filteredId
@@ -999,7 +1107,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads page data by id (only if id is in pages/ scandir whitelist)
+     * Loads page data by id
      *
      * @param string $pageId
      *
@@ -1019,7 +1127,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads element data by id (only if id is in elements/ scandir whitelist)
+     * Loads element data by id
      *
      * @param string $elementId
      *
@@ -1039,7 +1147,7 @@ class PseudoCMS {
     }
 
     /**
-     * Loads article data by id (only if id is in articles/ scandir whitelist)
+     * Loads article data by id
      *
      * @param mixed $articleId
      *
@@ -1732,7 +1840,7 @@ class PseudoCMS {
     }
 
     /**
-     * Prints element content as HTML (for modules / site template). No public GET route.
+     * Prints element content as HTML for modules / site template
      *
      * @param string $elementId
      *
@@ -1751,7 +1859,7 @@ class PseudoCMS {
     }
 
     /**
-     * Runs element content as PHP via eval (for modules / site template). No public GET route.
+     * Runs element content as PHP for modules / site template
      * Content should be PHP code without opening <?php tags.
      *
      * @param string $elementId
@@ -1834,7 +1942,7 @@ class PseudoCMS {
                 foreach ($slice as $io => $article) {
                     $result .= wf_tag('div', false, 'pcms_feed_item');
                     $titleLink = wf_Link(self::URL_ARTICLES . '&' . self::ROUTE_ARTICLE . '=' . $article['id'], $article['title']);
-                    $result .= wf_tag('h3', false, 'pcms_feed_title') . $titleLink . wf_tag('h3', true);
+                    $result .= wf_tag('h3', false, 'pcms_feed_title') . $titleLink . ' ' . $this->renderArticleEditControl($article['id']) . wf_tag('h3', true);
                     $result .= wf_tag('div', false, 'pcms_feed_excerpt');
                     $result .= $this->renderBody($article['short'], $article['type']);
                     $result .= wf_tag('div', true);
@@ -1856,9 +1964,9 @@ class PseudoCMS {
     }
 
     /**
-     * Recent module widget: latest N articles (PCMS_RECENT_COUNT or $limit)
+     * Recent module widget: latest N articles
      *
-     * @param int $limit 0 = use PCMS_RECENT_COUNT; empty config = no output
+     * @param int $limit 0 = use recentCount; empty config = no output
      *
      * @return string
      */
@@ -1879,7 +1987,7 @@ class PseudoCMS {
                     foreach ($slice as $io => $article) {
                         $result .= wf_tag('div', false, 'pcms_feed_item');
                         $titleLink = wf_Link(self::URL_ARTICLES . '&' . self::ROUTE_ARTICLE . '=' . $article['id'], $article['title']);
-                        $result .= wf_tag('h3', false, 'pcms_feed_title') . $titleLink . wf_tag('h3', true);
+                        $result .= wf_tag('h3', false, 'pcms_feed_title') . $titleLink . ' ' . $this->renderArticleEditControl($article['id']) . wf_tag('h3', true);
                         $result .= wf_tag('div', false, 'pcms_feed_excerpt');
                         $result .= $this->renderBody($article['short'], $article['type']);
                         $result .= wf_tag('div', true);
