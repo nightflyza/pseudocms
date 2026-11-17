@@ -1897,7 +1897,7 @@ class PseudoCMS {
                 $result .= wf_tag('div', true);
                 $result .= $this->renderArticleDate($article['datetime']);
                 $result .= wf_delimiter(0);
-                $result .= wf_BackLink(self::URL_ARTICLES);
+                $result .= wf_BackLink(self::URL_ARTICLES, __('Back'), false, 'pcms_article_back');
                 $result .= wf_tag('div', true);
             } else {
                 $result .= $this->messages->getStyledMessage(__('Article not found'), 'error');
